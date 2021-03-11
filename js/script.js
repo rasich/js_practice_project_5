@@ -6,19 +6,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
     let formData = new FormData(form);
 
-    const request = new XMLHttpRequest();
-    request.open('POST', './api.php');
-    request.send(formData);
-
-    request.addEventListener('load', function() {
-      if (request.status == 200) {
-        console.log(request.response);
-      } else {
-        console.error('Что-то пошло не так');
-      }
-    });
+    getResource("./api.php", formData)
+      .then(data => console.log(data))
+      .catch(err => console.error(err));
   }
 
   form.addEventListener('submit', (e) => req(e), {'once': true});
 
+  
+  async function getResource(url, data) {
+    const res = await fetch(`${url}`, {
+      method: "POST",
+      body: data
+    });
+
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+
+    return await res.text();
+  }
 });
