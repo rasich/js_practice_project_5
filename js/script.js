@@ -12,28 +12,11 @@ window.addEventListener('DOMContentLoaded', () => {
       obj[key] = value;
     });
 
-    getResource("http://localhost:3000/people", obj)
-      // .then(data => createCards(data))
-      .catch(err => console.error(err));
+    axios.post("http://localhost:3000/people", obj);
   }
 
   form.addEventListener('submit', (e) => req(e), {'once': true});
 
-  async function getResource(url, data) {
-    const res = await fetch(`${url}`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!res.ok) {
-      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-    }
-    
-    return await res.json();
-  }
   
   // function createCards(response) {
   //   response.forEach(item => {
